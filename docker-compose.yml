@@ -9,6 +9,12 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    # Tell Docker how to check if PostgreSQL is actually ready
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s   # check every 5 seconds
+      timeout: 5s    # wait up to 5 seconds for a response
+      retries: 5     # try 5 times before giving up
 
   backend:
     build: .
@@ -16,8 +22,11 @@ services:
       - "8000:8000"
     environment:
       DATABASE_URL: postgresql://postgres:password@db:5432/booktracker
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}  # reads from your .env file
+    # Now depends_on waits for the healthcheck to pass, not just container start
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - .:/app
 
