@@ -98,8 +98,8 @@ def chat_with_assistant(request: ChatRequest):
         model="claude-haiku-4-5-20251001",  # fast and cost-effective
         max_tokens=1024,
         system="""You are a helpful book assistant for a personal book tracking app. 
-        Help users discover books, discuss what they've read, and get personalized recommendations.
-        Be conversational, enthusiastic about books, and concise in your responses.""",
+          Help users discover books, discuss what they've read, and get personalized recommendations.
+          Be conversational, enthusiastic about books, and concise in your responses.""",
         messages=messages
     )
 
